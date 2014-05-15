@@ -24,9 +24,9 @@ def how_many_pages():
     if remainder > 0:
         number_of_pages += 1
 
-    return number_of_pages
+    return number_of_pages, num_elements
 
-def dailymed_lookup(number_of_pages):
+def dailymed_lookup(number_of_pages, num_elements):
     """Execute API call, massage data, and export pandas DataFrame"""
 
     blue_list = []
@@ -49,9 +49,9 @@ def dailymed_lookup(number_of_pages):
     blue_data.columns = [x.upper() for x in blue_data.columns]
     blue_data.to_csv('%s_dailymed_%s_drug_list_pulled.csv' %
                                 (strftime('%Y%m%d'), supplier))
+    if supplier == 'Bluepoint':
+        num_elements = num_elements - 1
+    print '%s elements returned by API call for %s' % (num_elements, supplier)
 
-    print '%s elements returned by API call for %s' % (num_elements -1, supplier)
-
-number_of_pages = how_many_pages()
-dailymed_lookup(number_of_pages)
-        
+number_of_pages, num_elements = how_many_pages()
+dailymed_lookup(number_of_pages, num_elements)
